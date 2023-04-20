@@ -1,37 +1,64 @@
 from typing import Union
+import datetime
 
 from pydantic import BaseModel
 
 
-class ItemBase(BaseModel):
-    title: str
-    description: Union[str, None] = None
+class UserBase(BaseModel):
+
+    name: str
+    email: str
+    gender: str
+    birthday: str
+    nation: str
+    password: str
 
 
-class ItemCreate(ItemBase):
+class UserCreate(UserBase):
     pass
 
 
-class Item(ItemBase):
+class User(UserBase):
     id: int
-    owner_id: int
 
     class Config:
         orm_mode = True
 
 
-class UserBase(BaseModel):
-    email: str
-
-
-class UserCreate(UserBase):
-    password: str
-
-
-class User(UserBase):
+class UserDelete(UserBase):
     id: int
-    is_active: bool
-    items: list[Item] = []
+
+
+class ProfileBase(BaseModel):
+    user_id: int
+
+
+class ProfileCreate(ProfileBase):
+    pass
+
+
+class Profile(ProfileBase):
+    location: str
+    hobby: str
+    interest: str
+    instroduce: str
+
+    class Config:
+        orm_mode = True
+
+
+class FriendBase(BaseModel):
+    caller_id: int
+    receiver_id: int
+    state: str
+
+
+class FriendCreate(FriendBase):
+    pass
+
+
+class Friend(FriendBase):
+    state: str
 
     class Config:
         orm_mode = True
