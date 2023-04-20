@@ -39,6 +39,12 @@ def read_user(user_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="User not found")
     return db_user
 
+#유저 프로필 조회
+@app.get("/profile/{user_id}")
+def get_profile(user_id : int, db : Session = Depends(get_db)):
+    db_profile = crud.get_profile(user_id=user_id)
+    return db_profile
+
 #회원 탈퇴
 @app.delete("/users/{user_id}", response_model=schemas.User)
 def delete_user(user_id : int, db : Session = Depends(get_db)):

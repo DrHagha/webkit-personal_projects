@@ -62,6 +62,12 @@ def call_friend(db : Session, caller_id : int, receiver_id : int):
     return db_friend
 
 # 프로필 보기
+def get_profile(db : Session, user_id):
+    db_user = db.query(models.User).filter(models.User.id == user_id).first()
+    db_profile = db.query(models.Profile).filter(models.Profile.user_id == user_id).first()
+    return db_user + db_profile
+    
+
 # 프로필 수정
 
 # 보낸 요청 목록 보기
