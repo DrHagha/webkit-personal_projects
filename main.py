@@ -63,14 +63,32 @@ def view_call_to_me(user_id : int, db : Session = Depends(get_db)):
     db_friends = crud.view_call_to_me(db = db, user_id=user_id)
     return db_friends
 
+#받은 요청 거부(삭제)
+@app.delete("/friend/to_me/")
+def delete_call_to_me(user_id : int, friend_id : int, db : Session = Depends(get_db)):
+    db_friend = crud.delete_call_to_me(db = db, friend_id = friend_id, user_id= user_id)
+    return db_friend
+
 #보낸요청 조회
 @app.get("/friend/from_me/")
 def view_call_to_me(user_id : int, db : Session = Depends(get_db)):
     db_friends = crud.view_call_from_me(db = db, user_id=user_id)
     return db_friends
 
+#보낸 요청 거부(삭제)
+@app.delete("/friend/from_me/")
+def delete_call_to_me(user_id : int, friend_id : int, db : Session = Depends(get_db)):
+    db_friend = crud.delete_call_from_me(db = db, friend_id = friend_id, user_id= user_id)
+    return db_friend
+
 #받은 요청 수락
-@app.put("/friend/accept")
+@app.put("/friend/accept/")
 def accept_call(friend_id : int, db : Session = Depends(get_db)):
     db_friend = crud.accept_call(db = db, friend_id=friend_id)
+    return db_friend
+
+#친구 삭제
+@app.delete("/friend/")
+def delete_friend(friend_id : int, user_id : int, db : Session = Depends(get_db)):
+    db_friend = crud.delete_friend(friend_id = friend_id, user_id= user_id, db=db)
     return db_friend

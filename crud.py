@@ -77,7 +77,13 @@ def accept_call(db : Session, friend_id : int):
     db.commit()
     db.refresh(db_friend)
     return db_friend
+
 # 받은 요청 삭제
+def delete_call_to_me(db : Session, freind_id : int, user_id : int):
+    db_friend = db.query(models.Friend).filter(models.Friend.id == freind_id, models.Friend.receiver_id == user_id, models.Friend.state == "요청").first()
+    db.delete(db_friend)
+    db.commit()
+    return {"message" : "삭제성공"}
 
 # 받은 요청 목록보기
 def view_call_to_me(db : Session, user_id : int):
@@ -85,8 +91,20 @@ def view_call_to_me(db : Session, user_id : int):
     return db_call_list
 
 # 보낸 요청 삭제
-# 친구 목록 보기
+def delete_call_from_me(db : Session, freind_id : int, user_id : int):
+    db_friend = db.query(models.Friend).filter(models.Friend.id == freind_id, models.Friend.caller_id == user_id, models.Friend.state == "요청").first()
+    db.delete(db_friend)
+    db.commit()
+    return {"message" : "삭제성공"}
+
+# 친구 목록 보기 //list 더해서 반환해야함
+
 # 친구 삭제
+def delete_friend(db : Session, freind_id : int, user_id : int):
+    db_friend = db.query(models.Friend).filter(models.Friend.id == freind_id, models.Friend.state == "친구").first()
+    db.delete(db_friend)
+    db.commit()
+    return {"message" : "삭제성공"}
 
 # 전체유저에서 검색
 def get_users(db: Session, skip: int = 0, limit: int = 100):
