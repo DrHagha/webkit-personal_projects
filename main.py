@@ -71,4 +71,6 @@ def view_call_to_me(user_id : int, db : Session = Depends(get_db)):
 
 #받은 요청 수락
 @app.put("/friend/accept")
-def accept_call(friend_id : int, db : Session = Depends)
+def accept_call(friend_id : int, db : Session = Depends(get_db)):
+    db_friend = crud.accept_call(db = db, friend_id=friend_id)
+    return db_friend

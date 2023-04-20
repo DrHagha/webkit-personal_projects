@@ -71,7 +71,7 @@ def view_call_from_me(db : Session, user_id : int):
 
 # 친구요청 수락
 def accept_call(db : Session, friend_id : int):
-    db_friend = db.query(models.Friend).filter(models.Friend.id == friend_id).filter()
+    db_friend = db.query(models.Friend).filter(models.Friend.id == friend_id).first()
     db_friend.state = "친구"
     db.add(db_friend)
     db.commit()
