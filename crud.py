@@ -66,7 +66,7 @@ def call_friend(db : Session, caller_id : int, receiver_id : int):
 
 # 보낸 요청 목록 보기
 def view_call_from_me(db : Session, user_id : int):
-    db_call_list = db.query(models.Friend).filter(models.Friend.caller_id == user_id, models.Friend.state == "요청").all()
+    db_call_list = db.query(models.Friend).filter(models.Friend.receiver_id == user_id, models.Friend.state == "요청").all()
     return db_call_list
 
 # 친구요청 수락
@@ -79,8 +79,8 @@ def accept_call(db : Session, friend_id : int):
     return db_friend
 
 # 받은 요청 삭제
-def delete_call_to_me(db : Session, freind_id : int, user_id : int):
-    db_friend = db.query(models.Friend).filter(models.Friend.id == freind_id, models.Friend.receiver_id == user_id, models.Friend.state == "요청").first()
+def delete_call_to_me(db : Session, friend_id : int, user_id : int):
+    db_friend = db.query(models.Friend).filter(models.Friend.id == friend_id, models.Friend.receiver_id == user_id, models.Friend.state == "요청").first()
     db.delete(db_friend)
     db.commit()
     return {"message" : "삭제성공"}
@@ -91,8 +91,8 @@ def view_call_to_me(db : Session, user_id : int):
     return db_call_list
 
 # 보낸 요청 삭제
-def delete_call_from_me(db : Session, freind_id : int, user_id : int):
-    db_friend = db.query(models.Friend).filter(models.Friend.id == freind_id, models.Friend.caller_id == user_id, models.Friend.state == "요청").first()
+def delete_call_from_me(db : Session, friend_id : int, user_id : int):
+    db_friend = db.query(models.Friend).filter(models.Friend.id == friend_id, models.Friend.caller_id == user_id, models.Friend.state == "요청").first()
     db.delete(db_friend)
     db.commit()
     return {"message" : "삭제성공"}
@@ -100,8 +100,8 @@ def delete_call_from_me(db : Session, freind_id : int, user_id : int):
 # 친구 목록 보기 //list 더해서 반환해야함
 
 # 친구 삭제
-def delete_friend(db : Session, freind_id : int, user_id : int):
-    db_friend = db.query(models.Friend).filter(models.Friend.id == freind_id, models.Friend.state == "친구").first()
+def delete_friend(db : Session, friend_id : int, user_id : int):
+    db_friend = db.query(models.Friend).filter(models.Friend.id == friend_id, models.Friend.state == "친구").first()
     db.delete(db_friend)
     db.commit()
     return {"message" : "삭제성공"}
