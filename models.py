@@ -13,6 +13,7 @@ class User(Base):
     gender = Column(String, index=True)
     birthday = Column(String)
     nation = Column(String, index=True)
+    language = Column(String)
     password = Column(String)
 
     my_profile = relationship("Profile")

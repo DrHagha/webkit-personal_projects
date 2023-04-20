@@ -25,6 +25,12 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="Email already registered")
     return crud.create_user(db=db, user=user)
 
+#언어변경
+@app.put("/setting/language/{user_id}")
+def update_language(user_id : int, language : str, db : Session = Depends(get_db)):
+    db_user = crud.update_language(user_id=user_id, language=language, db=db)
+    return db_user
+
 #유저 목록 호출
 @app.get("/users/", response_model=list[schemas.User])
 def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
@@ -39,10 +45,22 @@ def read_user(user_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="User not found")
     return db_user
 
+#수정을 위한 프로필 조회
+@app.get("/profile/me/{user_id}")
+def get_my_profile(user_id : int, db : Session = Depends(get_db)):
+    db_profile = crud.get_my_profile(user_id=user_id ,db=db)
+    return db_profile
+
 #유저 프로필 조회
 @app.get("/profile/{user_id}")
 def get_profile(user_id : int, db : Session = Depends(get_db)):
-    db_profile = crud.get_profile(user_id=user_id)
+    db_profile = crud.get_profile(user_id=user_id ,db=db)
+    return db_profile
+
+#유저 프로필 수정
+@app.put("/profile/{user_id}")
+def get_profile(user_id : int, profile : schemas.Profile, db : Session = Depends(get_db)):
+    db_profile = crud.update_profile(user_id=user_id, profile=profile, db=db)
     return db_profile
 
 #회원 탈퇴

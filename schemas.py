@@ -30,7 +30,11 @@ class UserDelete(UserBase):
 
 
 class ProfileBase(BaseModel):
-    user_id: int
+    
+    location: str
+    hobby: str
+    interest: str
+    instroduce: str
 
 
 class ProfileCreate(ProfileBase):
@@ -38,10 +42,6 @@ class ProfileCreate(ProfileBase):
 
 
 class Profile(ProfileBase):
-    location: str
-    hobby: str
-    interest: str
-    instroduce: str
 
     class Config:
         orm_mode = True
