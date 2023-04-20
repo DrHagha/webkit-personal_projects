@@ -92,3 +92,9 @@ def accept_call(friend_id : int, db : Session = Depends(get_db)):
 def delete_friend(friend_id : int, user_id : int, db : Session = Depends(get_db)):
     db_friend = crud.delete_friend(friend_id = friend_id, user_id= user_id, db=db)
     return db_friend
+
+#친구 목록보기
+@app.get("/freind/{user_id}")
+def get_friends(user_id : int, db : Session = Depends(get_db)):
+    db_friends = crud.get_friend_list(user_id= user_id, db=db)
+    return db_friends

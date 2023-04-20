@@ -98,6 +98,11 @@ def delete_call_from_me(db : Session, friend_id : int, user_id : int):
     return {"message" : "삭제성공"}
 
 # 친구 목록 보기 //list 더해서 반환해야함
+def get_friend_list(db : Session, user_id : int):
+    db_friends1 = db.query(models.Friend).filter(models.Friend.caller_id == user_id, models.Friend.state == "친구").all()
+    db_friends2 = db.query(models.Friend).filter(models.Friend.receiver_id == user_id, models.Friend.state == "친구").all()
+    db_friends = db_friends1 + db_friends2
+    return db_friends
 
 # 친구 삭제
 def delete_friend(db : Session, friend_id : int, user_id : int):
