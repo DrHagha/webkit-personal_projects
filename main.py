@@ -1,13 +1,33 @@
-from fastapi import Depends, FastAPI, HTTPException
+from fastapi import Depends, FastAPI, HTTPException, APIRouter
 from sqlalchemy.orm import Session
+from datetime import timedelta, datetime
 
 import crud, models,schemas
 from database import SessionLocal, engine
+
+from fastapi.security import OAuth2PasswordRequestForm
+from jose import jwt
+
+from secret import ACCESS_TOKEN_EXPIRE_MINUTES, SECRET_KEY, ALGORITHM 
+from fastapi.middleware.cors import CORSMiddleware
 
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
+origins = [
+    "http://localhost",
+    "http://localhost:3000",
+]
+
+# CORS 미들웨어를 설정합니다.
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Dependency
 def get_db():
@@ -16,6 +36,15 @@ def get_db():
         yield db
     finally:
         db.close()
+
+#로그인
+@app.post("/login", response_model=schemas.User)
+def login_for_access_token(email : str, password : str, db: Session = Depends(get_db)):
+    print(email)
+    print(password)
+    login_user = crud.login(email=email, password= password, db=db)
+    print(login_user)
+    return login_user
 
 #회원 생성
 @app.post("/users/", response_model=schemas.User)
@@ -49,6 +78,7 @@ def read_user(user_id: int, db: Session = Depends(get_db)):
 @app.get("/profile/me/{user_id}")
 def get_my_profile(user_id : int, db : Session = Depends(get_db)):
     db_profile = crud.get_my_profile(user_id=user_id ,db=db)
+    print(db_profile)
     return db_profile
 
 #유저 프로필 조회
@@ -121,4 +151,5 @@ def delete_friend(friend_id : int, user_id : int, db : Session = Depends(get_db)
 @app.get("/freind/{user_id}")
 def get_friends(user_id : int, db : Session = Depends(get_db)):
     db_friends = crud.get_friend_list(user_id= user_id, db=db)
+    print(db_friends)
     return db_friends

@@ -1,7 +1,13 @@
 from sqlalchemy.orm import Session
 
+from passlib.context import CryptContext
+
 import models,schemas
 
+#로그린
+def login(db : Session, email : str, password : str):
+    login_user = db.query(models.User).filter(models.User.email == email, models.User.password == password).first()
+    return login_user
 # 회원 생성 #프로필 추가 필요
 def create_user(db: Session, user: schemas.UserCreate):
     db_user = models.User(
